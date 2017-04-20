@@ -30,18 +30,17 @@
           <li> <a href="/latest">Latest</a> </li>
           <li> <a href="/tags">Tags</a> </li>
           <li> <a href="/add">Add new</a> </li>
+          <li> <a href="/login">Log in</a> </li>
           {% if session.authorized %}
           <li> <a href="/queue">Queue</a> </li>
-          {% else %}
-          <li> <a href="/login">Log in</a> </li>
           {% endif %}
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-              <form onSubmit="location.href='/search/' + this.search.value;return false" class="navbar-form navbar-left" role="search">
+              <form action="/search" method="post" class="navbar-form navbar-left" role="search">
                   <div class="form-group">
-                      <input id="search" type="search" class="form-control" placeholder="Search">
+                      <input type="search" class="form-control" placeholder="Search">
                   </div>
               </form>
             </li>
@@ -59,7 +58,7 @@
 
         <footer class="footer">
           <div class="footer-copyright">
-            Copyright © Lord Gumblert Productions 2016
+            <a href="https://github.com/SecretlyTaco/smash">Smash source code</a>
           </div>
         </footer>
       </div>
