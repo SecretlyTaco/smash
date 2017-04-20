@@ -79,7 +79,7 @@ def latest():
             "latest.html",
             title="Latest",
             quotes=quotes,
-            numpages=1 + allquotes//10,
+            numpages=1 + allquotes//10 if allquotes%10 != 0 else allquotes//10,
             curpage=0,
             page_type="latest"
         )
@@ -99,7 +99,7 @@ def latest_page(page):
         "latest.html",
         title="Latest - page {}".format(page),
         quotes=quotes,
-        numpages=1 + allquotes//10,
+        numpages=1 + allquotes//10 if allquotes%10 != 0 else allquotes//10,
         curpage=page-1,
         page_type="latest"
     )
