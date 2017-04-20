@@ -1,4 +1,5 @@
 import datetime
+import random
 import logging
 import psycopg2
 from flask import render_template, Markup, request, abort, session, g
@@ -36,6 +37,14 @@ def index():
                 datetime.datetime.now().strftime("%d/%m/%y"),
                 conf.config['APPNAME']
             )
+
+    #Show random quote on the homepage if any exist
+    quotes = Quote.query.filter_by(approved=True).order_by(Quote.id.desc())all()
+    numOfQuotes = len(quotes)
+    if len(quotes)>0:
+        quoteNum = random.choice(range(1,numOfQuotes+1))
+        quote = quotes[quoteNum]
+        news = str(Markup.escape(quote.content)).replace('\n', '<br />')
 
     return render_template(
         "index.html",
@@ -131,10 +140,6 @@ def moderate():
 
     elif request.form['submit'] == "Delete":
         quote = Quote.query.filter_by(id=request.form['quoteid']).first()
-        # Delete dangling tags (alive only with current Quote)
-        dangling_tags = [tag for tag in quote.tags if tag.quotes.count() == 1]
-        for tag in dangling_tags:
-            db.session.delete(tag)
         db.session.delete(quote)
         db.session.commit()
 
@@ -302,7 +307,7 @@ def add_new():
             preview_tags = request.form["tags"].split(',')
             preview.approved = True
             preview.tags = [Tag(tag) for tag in preview_tags]
-            
+
             return render_template(
                 "latest.html",
                 title="Quote preview",
