@@ -42,8 +42,7 @@ def index():
     quotes = Quote.query.filter_by(approved=True).order_by(Quote.id.desc())all()
     numOfQuotes = len(quotes)
     if len(quotes)>0:
-        quoteNum = random.choice(range(1,numOfQuotes+1))
-        quote = quotes[quoteNum]
+        quote = random.choice(quotes)
         news = str(Markup.escape(quote.content)).replace('\n', '<br />')
 
     return render_template(
