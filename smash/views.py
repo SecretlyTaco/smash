@@ -39,7 +39,7 @@ def index():
             )
 
     #Show random quote on the homepage if any exist
-    quotes = Quote.query.filter_by(approved=True).order_by(Quote.id.desc())all()
+    quotes = Quote.query.filter_by(approved=True).order_by(Quote.id.desc()).all()
     numOfQuotes = len(quotes)
     if len(quotes)>0:
         quote = random.choice(quotes)
