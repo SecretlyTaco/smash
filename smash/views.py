@@ -226,52 +226,16 @@ def tags():
     )
 
 
-@app.route('/search/<query>')
-def search(query):
-    quotes = Quote.query.filter_by(approved=True).filter(Quote.content.ilike('%{}%'.format(query))).order_by(Quote.id.desc()).all()
-
-    allquotes = len(quotes)
-    quotes = quotes[:10]
-
-    if len(quotes)>0:
-        # Replace line breaks with html breaks and escape special characters
-        for quote in quotes:
-            quote.content = str(Markup.escape(quote.content)).replace('\n', '</br>')
-
+@app.route('/search', methods=['POST'])
+def search():
+    if request.method == 'POST':
         return render_template(
-            "search.html",
-            title="Search for: {}".format(query),
-            quotes=quotes,
-            numpages=1 + allquotes//10,
-            curpage=0,
-            page_type="search",
-            search_query=query
+            "message.html",
+            alertclass="alert-warning",
+            message="Not implemented yet. "
         )
     else:
-        return message("alert-warning", "No quotes in the database.")
-
-
-@app.route('/search/<query>/<int:page>')
-def search_page(query, page):
-    allquotes = len(Quote.query.filter_by(approved=True).\
-                                filter(Quote.content.ilike('%{}%'.format(query))).\
-                                order_by(Quote.id.desc()).all())
-    quotes = Quote.query.filter_by(approved=True).\
-                         filter(Quote.content.ilike('%{}%'.format(query))).\
-                         order_by(Quote.id.desc()).all()[(page-1)*10:page*10]
-
-    for quote in quotes:
-        quote.content = str(Markup.escape(quote.content)).replace('\n', '</br>')
-
-    return render_template(
-        "search.html",
-        title="Search for: {} - page {}".format(query, page),
-        quotes=quotes,
-        numpages=1 + allquotes//10,
-        curpage=page-1,
-        page_type="search",
-        search_query=query
-    )
+        return 'Invalid request.'
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -302,19 +266,7 @@ def add_new():
             )
 
         elif request.form['submit'] == "Preview":
-            preview = Quote(request.form['newquote'], request.remote_addr, timestamp())
-            preview_tags = request.form["tags"].split(',')
-            preview.approved = True
-            preview.tags = [Tag(tag) for tag in preview_tags]
-
-            return render_template(
-                "latest.html",
-                title="Quote preview",
-                quotes=[preview,],
-                numpages=1,
-                curpage=0,
-                page_type="quote"
-            )
+            return str(request.form)
         else:
             abort(501)
 
