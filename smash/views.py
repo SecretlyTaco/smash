@@ -1,4 +1,5 @@
 import datetime
+import random
 import logging
 import psycopg2
 from flask import render_template, Markup, request, abort, session, g
@@ -36,6 +37,14 @@ def index():
                 datetime.datetime.now().strftime("%d/%m/%y"),
                 conf.config['APPNAME']
             )
+
+    #Show random quote on the homepage if any exist
+    quotes = Quote.query.filter_by(approved=True).order_by(Quote.id.desc())all()
+    numOfQuotes = len(quotes)
+    if len(quotes)>0:
+        quoteNum = random.choice(range(1,numOfQuotes+1))
+        quote = quotes[quoteNum]
+        news = str(Markup.escape(quote.content)).replace('\n', '<br />')
 
     return render_template(
         "index.html",
