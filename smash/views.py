@@ -44,7 +44,7 @@ def index():
     if len(quotes)>0:
         quote = random.choice(quotes)
         news = str(Markup.escape(quote.content)).replace('\n', '<br />')
-        news += str("<a href='quote/" + str(quote) + "'>Permalink</a>")
+        news += str("<a href='quote/" + str(quote.id) + "'>Permalink</a>")
 
     return render_template(
         "index.html",
