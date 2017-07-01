@@ -209,7 +209,7 @@ def tag_page(tagname, page):
             "latest.html",
             title="Tag - {} - page {}".format(tagname, page),
             quotes=tag.quotes,
-            numpages=1 + allquotes//10,
+            numpages=1 + allquotes//10 if allquotes%10 != 0 else allquotes//10,
             curpage=0,
             page_type="tag/{}".format(tagname)
         )
